@@ -11,20 +11,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-interface Coin {
-  id: string;
-  name: string;
-  api_symbol: string;
-  symbol: string;
-  market_cap_rank: number;
-  thumb: string;
-  large: string;
-}
-
-interface SearchResults {
-  coins: Coin[];
-}
+import { SearchResults, Coin } from "@/types/types";
+import { tokenStore } from "@/store/token";
 
 const SearchInput: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -34,10 +22,15 @@ const SearchInput: React.FC = () => {
     search(event.target.value);
   };
 
+  const updateToken = tokenStore((state: any) => state.updateToken);
+
   const handleCardClick = (coin: Coin) => {
     setIsDialogOpen(false);
-    search("");
+    updateToken(coin);
+
     console.log(coin);
+    
+    search("");
   };
 
   const { coins }: SearchResults = searchResults as unknown as SearchResults;
