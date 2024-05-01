@@ -1,11 +1,18 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import TokenData from "@/components/tokenData/TokenData";
+import TokenChart from "@/components/tokenChart/TokenChart";
+import UserData from "@/components/userData/UserData";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-3xl font-bold text-cyan-700">Hello world</h1>
-      <Button onClick={() => console.log("test")}>Click me</Button>
-    </main>
+    <>
+      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        <TokenData />
+      </div>
+      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+        <TokenChart />
+        <UserData />
+      </div>
+    </>
   );
 }
