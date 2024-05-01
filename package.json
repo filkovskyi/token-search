@@ -26,7 +26,8 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "viem": "2.x",
-    "wagmi": "^2.7.1"
+    "wagmi": "^2.7.1",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",
