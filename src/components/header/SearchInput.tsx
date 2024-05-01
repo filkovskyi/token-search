@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
-import useSearch from "@/hooks/useSearch";
+import useCoinsList from "@/hooks/useCoinsList";
 import {
   Dialog,
   DialogContent,
@@ -10,30 +10,39 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { SearchResults, Coin } from "@/types/types";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Coin } from "@/types/types";
 import { tokenStore } from "@/store/token";
 
 const SearchInput: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { searchTerm, searchResults, loading, error, search } = useSearch();
+  const updateToken = tokenStore((state: any) => state.updateToken);
+
+  const { coins, loading, error } = useCoinsList();
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    search(event.target.value);
+    setSearchTerm(event.target.value);
   };
 
-  const updateToken = tokenStore((state: any) => state.updateToken);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   const handleCardClick = (coin: Coin) => {
     setIsDialogOpen(false);
     updateToken(coin);
 
-    console.log(coin);
-    
-    search("");
+    setSearchTerm("");
   };
 
-  const { coins }: SearchResults = searchResults as unknown as SearchResults;
+  const filteredCoins = coins.filter((coin) =>
+    coin.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="ml-auto flex-1 sm:flex-initial">
@@ -49,28 +58,24 @@ const SearchInput: React.FC = () => {
             />
           </div>
         </DialogTrigger>
-        <DialogContent className=" sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Search token</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <form className=" flex w-full">
+            <form className="flex w-full">
               <div className="relative w-full">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
                   placeholder="Search token..."
-                  className="pl-8 "
+                  className="pl-8"
                   value={searchTerm}
                   onChange={handleSearch}
                 />
               </div>
             </form>
-
-            {loading && <div>Loading...</div>}
-            {error && <div>{error}</div>}
-
-            {coins && coins.length > 0 && (
+            {filteredCoins.length > 0 && (
               <Card
                 className="mt-[40px] h-80 overflow-y-scroll"
                 x-chunk="dashboard-01-chunk-5"
@@ -79,16 +84,16 @@ const SearchInput: React.FC = () => {
                   <CardTitle>Searching results: </CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                  {coins.map((coin: Coin) => (
+                  {filteredCoins.map((coin: Coin) => (
                     <div
                       key={coin.id}
                       className="flex items-center gap-4 py-2 cursor-pointer hover:bg-gray-100 transition duration-200"
                       onClick={() => handleCardClick(coin)}
                     >
                       <Avatar className="hidden h-9 w-9 sm:flex">
-                        <AvatarImage src={coin.large} alt={coin.name} />
-                        <AvatarFallback>{coin.name}</AvatarFallback>
+                        <AvatarFallback>{coin.symbol}</AvatarFallback>
                       </Avatar>
+
                       <div className="grid gap-1">
                         <p className="text-sm font-medium leading-none">
                           {coin.name}

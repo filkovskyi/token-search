@@ -1,4 +1,4 @@
-export type Coin = {
+export type Token = {
   updateToken: any;
   token: any;
   id: string;
@@ -11,5 +11,20 @@ export type Coin = {
 };
 
 export type SearchResults = {
+  coins: Token[];
+};
+
+export type Coin = {
+  id: string;
+  symbol: string;
+  name: string;
+  platforms: {
+    [key: string]: string;
+  };
+};
+
+export type UseCoinListResult = {
   coins: Coin[];
+  loading: boolean;
+  error: string;
 };
