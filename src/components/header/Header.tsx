@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Header: React.FC = () => {
   return (
@@ -113,7 +114,16 @@ const Header: React.FC = () => {
             />
           </div>
         </form>
-        <DropdownMenu>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            padding: 12,
+          }}
+        >
+          <ConnectButton />
+        </div>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
               <CircleUser className="h-5 w-5" />
@@ -128,7 +138,7 @@ const Header: React.FC = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem>Logout</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
     </header>
   );
