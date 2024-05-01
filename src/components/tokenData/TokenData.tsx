@@ -14,8 +14,6 @@ const TokenData: React.FC = () => {
     token: token.platforms.ethereum,
   });
 
-  console.log(data);
-
   return (
     <Card x-chunk="dashboard-01-chunk-5">
       <CardHeader>
